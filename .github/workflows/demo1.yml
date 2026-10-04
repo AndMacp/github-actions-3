@@ -1,5 +1,8 @@
 name: Events Demo 1
 on: 
+  push:
+    branches: 
+      - andrejs
   pull_request: 
     types: [opened]
 
@@ -21,4 +24,4 @@ jobs:
       - name: Build code
         run: npm run build
       - name: Deploy project
-        run: echo "Deploying....."
+        run: echo "Deploying..."
