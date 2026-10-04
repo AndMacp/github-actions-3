@@ -3,6 +3,7 @@ on:
   push:
     branches: 
       - andrejs
+      - main
   pull_request: 
     types: [opened]
 
@@ -10,8 +11,11 @@ on:
       - andrejs
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
+    outputs: 
+      getGithubEvent: ${{steps.getEvent.outputs.value}}
+
     steps:
       - name: Output event data
         run: echo "${{ toJSON(github.event) }}"
@@ -23,5 +27,14 @@ jobs:
         run: npm run test
       - name: Build code
         run: npm run build
-      - name: Deploy project
-        run: echo "Deploying..."
+      - name: Save output
+        id: getEvent
+        run: echo "value=${{toJson(github.event)}}" >> "$GITHUB_OUTPUT" 
+  
+  displayEvent:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Display event
+        run: echo ${{needs.build.outputs.getGithubEvent}}
