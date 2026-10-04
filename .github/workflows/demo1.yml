@@ -21,6 +21,11 @@ jobs:
         run: echo "${{ toJSON(github.event) }}"
       - name: Get code
         uses: actions/checkout@v3
+      - name: Use and cache npm
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
       - name: Install dependencies
         run: npm ci
       - name: Test code
@@ -36,5 +41,10 @@ jobs:
     needs: build
 
     steps:
+      - name: Use and cache npm
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
       - name: Display event
         run: echo ${{needs.build.outputs.getGithubEvent}}
